@@ -17,6 +17,7 @@ import { inject as service } from '@ember/service';
 import promiseObject from 'travis/utils/promise-object';
 
 import moment from 'moment';
+import $ from 'jquery';
 
 export default Model.extend(DurationCalculations, DurationAttributes, {
   api: service(),
@@ -26,6 +27,7 @@ export default Model.extend(DurationCalculations, DurationAttributes, {
 
   logId: attr(),
   queue: attr(),
+  state: attr(),
   state: attr(),
   number: attr(),
   allowFailure: attr('boolean'),
@@ -204,6 +206,20 @@ export default Model.extend(DurationCalculations, DurationAttributes, {
   },
 
   onStateChange: observer('state', function () {
+    let currentState = this.get('state');
+    console.log('hello');
+    if (currentState === 'created') {
+      $('#num1').css('color', '#3EAAAF');
+    }
+
+    if (currentState === 'queued') {
+      $('#num2').css('color', '#3EAAAF');
+    }
+    
+    if (currentState === 'received') {
+      $('#num3').css('color', '#3EAAAF');
+    }
+
     if (this.get('state') === 'finished' && Travis.pusher) {
       return this.unsubscribe();
     }
