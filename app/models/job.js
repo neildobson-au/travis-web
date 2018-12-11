@@ -27,8 +27,8 @@ export default Model.extend(DurationCalculations, DurationAttributes, {
 
   logId: attr(),
   queue: attr(),
-  state: 'created',
-  // state: attr(),
+  // state: 'created',
+  state: attr(),
   number: attr(),
   allowFailure: attr('boolean'),
   tags: attr(),
@@ -92,6 +92,8 @@ export default Model.extend(DurationCalculations, DurationAttributes, {
   notStarted: computed('state', function () {
     let state = this.get('state');
     let waitingStates = ['created', 'queued', 'received', 'requeued'];
+    $('.loading-line-4').removeClass('waiting-checkmark-gray');
+    $('.loading-line-4').addClass('waiting-checkmark');
     return waitingStates.includes(state);
   }),
 
@@ -207,26 +209,49 @@ export default Model.extend(DurationCalculations, DurationAttributes, {
 
   onStateChange: observer('state', function () {
     let currentState = this.get('state');
-    console.log('hello');
-    if (currentState === 'created' || currentState === 'queued') {
-      // $('span.loading-ring-1').addClass('spinner');
-      $('#num1').css('color', '#3EAAAF');
+    console.log(currentState);
+    if (currentState === 'created') {
+      $('span.loading-ring-1').ready(function() {
+        $('.loading-ring-1').addClass('spinner');
+        $('#num1').addClass('num-loading');
+      });
     }
 
     if (currentState === 'queued') {
+      $('.loading-ring-1').removeClass('spinner');
+      $('.loading-ring-1').addClass('loading-ring');
+      $('#num1').removeClass('num-loading');
+      $('#num1').addClass('num-loaded');
       $('.loading-line-1').css('border-bottom-color', '#3EAAAF');
-      $('#num2').css('color', '#3EAAAF');
+      $('span.loading-ring-2').addClass('spinner');
+      $('#num2').addClass('num-loading');
     }
 
     if (currentState === 'received') {
-      $('.loading-ring-3').addClass('spinner');
-      $('.loading-line-2').css('border-bottom-color', '#3EAAAF');
-      // $('#num3').css('color', '#3EAAAF');
+      $('span.loading-ring-3').ready(function() {
+        $('.loading-ring-1').removeClass('spinner');
+        $('.loading-ring-1').addClass('loading-ring');
+        $('.loading-line-1').css('border-bottom-color', '#3EAAAF');
+        $('.loading-ring-2').removeClass('spinner');
+        $('.loading-ring-2').addClass('loading-ring');
+        $('#num1').removeClass('num-loading');
+        $('#num1').addClass('num-loaded');
+        $('.loading-ring-2').removeClass('spinner');
+        $('.loading-ring-2').addClass('loading-ring');
+        $('#num2').removeClass('num-loading');
+        $('#num2').addClass('num-loaded');
+        $('.loading-ring-3').addClass('spinner');
+        $('#num3').addClass('num-loading');
+        $('.loading-line-2').css('border-bottom-color', '#3EAAAF');
+      });
     }
 
     if (!currentState.include(notStarted) || currentState !== undefined) {
+      $('.loading-ring-3').removeClass('spinner');
+      $('.loading-ring-3').addClass('loading-ring');
       $('.loading-line-3').css('border-bottom-color', '#3EAAAF');
-      $('#num3').css('color', '#3EAAAF');
+      $('.loading-line-4').removeClass('waiting-checkmark-gray');
+      $('.loading-line-4').addClass('waiting-checkmark');
     }
     if (this.get('state') === 'finished' && Travis.pusher) {
       return this.unsubscribe();
