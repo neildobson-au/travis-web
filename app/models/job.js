@@ -92,8 +92,6 @@ export default Model.extend(DurationCalculations, DurationAttributes, {
   notStarted: computed('state', function () {
     let state = this.get('state');
     let waitingStates = ['created', 'queued', 'received', 'requeued'];
-    $('.loading-line-4').removeClass('waiting-checkmark-gray');
-    $('.loading-line-4').addClass('waiting-checkmark');
     return waitingStates.includes(state);
   }),
 
@@ -209,9 +207,8 @@ export default Model.extend(DurationCalculations, DurationAttributes, {
 
   onStateChange: observer('state', function () {
     let currentState = this.get('state');
-    console.log(currentState);
     if (currentState === 'created') {
-      $('span.loading-ring-1').ready(function() {
+      $('span.loading-ring-1').ready(() => {
         $('.loading-ring-1').addClass('spinner');
         $('#num1').addClass('num-loading');
       });
@@ -228,7 +225,7 @@ export default Model.extend(DurationCalculations, DurationAttributes, {
     }
 
     if (currentState === 'received') {
-      $('span.loading-ring-3').ready(function() {
+      $('span.loading-ring-3').ready(() => {
         $('.loading-ring-1').removeClass('spinner');
         $('.loading-ring-1').addClass('loading-ring');
         $('.loading-line-1').css('border-bottom-color', '#3EAAAF');
@@ -246,7 +243,7 @@ export default Model.extend(DurationCalculations, DurationAttributes, {
       });
     }
 
-    if (!currentState.include(notStarted) || currentState !== undefined) {
+    if (currentState === 'started') {
       $('.loading-ring-3').removeClass('spinner');
       $('.loading-ring-3').addClass('loading-ring');
       $('.loading-line-3').css('border-bottom-color', '#3EAAAF');
