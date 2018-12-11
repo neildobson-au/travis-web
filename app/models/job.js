@@ -219,7 +219,7 @@ export default Model.extend(DurationCalculations, DurationAttributes, {
       $('.loading-ring-1').addClass('loading-ring');
       $('#num1').removeClass('num-loading');
       $('#num1').addClass('num-loaded');
-      $('.loading-line-1').css('border-bottom-color', '#3EAAAF');
+      $('#loading-line-1').addClass('loading-line');
       $('span.loading-ring-2').addClass('spinner');
       $('#num2').addClass('num-loading');
     }
@@ -228,9 +228,10 @@ export default Model.extend(DurationCalculations, DurationAttributes, {
       $('span.loading-ring-3').ready(() => {
         $('.loading-ring-1').removeClass('spinner');
         $('.loading-ring-1').addClass('loading-ring');
-        $('.loading-line-1').css('border-bottom-color', '#3EAAAF');
+        $('#loading-line-1').addClass('loading-line');
         $('.loading-ring-2').removeClass('spinner');
         $('.loading-ring-2').addClass('loading-ring');
+        $('#loading-line-2').addClass('loading-line');
         $('#num1').removeClass('num-loading');
         $('#num1').addClass('num-loaded');
         $('.loading-ring-2').removeClass('spinner');
@@ -239,7 +240,6 @@ export default Model.extend(DurationCalculations, DurationAttributes, {
         $('#num2').addClass('num-loaded');
         $('.loading-ring-3').addClass('spinner');
         $('#num3').addClass('num-loading');
-        $('.loading-line-2').css('border-bottom-color', '#3EAAAF');
       });
     }
 
