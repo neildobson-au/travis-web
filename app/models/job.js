@@ -1,4 +1,3 @@
-
 /* global Travis */
 
 import { observer, computed } from '@ember/object';
@@ -12,7 +11,7 @@ import DurationCalculations from 'travis/mixins/duration-calculations';
 import DurationAttributes from 'travis/mixins/duration-attributes';
 import attr from 'ember-data/attr';
 import { belongsTo } from 'ember-data/relationships';
-import { alias, and, not, reads } from '@ember/object/computed';
+import { alias, and, equal, not, reads } from '@ember/object/computed';
 import { inject as service } from '@ember/service';
 import promiseObject from 'travis/utils/promise-object';
 
@@ -23,10 +22,8 @@ export default Model.extend(DurationCalculations, DurationAttributes, {
   ajax: service(),
   jobConfigFetcher: service(),
   features: service(),
-
   logId: attr(),
   queue: attr(),
-  // state: 'created',
   state: attr(),
   number: attr(),
   allowFailure: attr('boolean'),
@@ -76,23 +73,11 @@ export default Model.extend(DurationCalculations, DurationAttributes, {
     return finishedStates.includes(state);
   }),
 
-  created: computed('state', function () {
-    let state = this.get('state');
-    let waitingState = 'created';
-    return isEqual(state, waitingState);
-  }),
+  isCreated: equal('state', 'created'),
 
-  queued: computed('state', function () {
-    let state = this.get('state');
-    let waitingState = 'queued';
-    return isEqual(state, waitingState);
-  }),
+  isQueued: equal('state', 'queued'),
 
-  received: computed('state', function () {
-    let state = this.get('state');
-    let waitingState = 'received';
-    return isEqual(state, waitingState);
-  }),
+  isReceived: equal('state', 'received'),
 
   toBeQueued: computed('state', function () {
     let state = this.get('state');
@@ -108,7 +93,7 @@ export default Model.extend(DurationCalculations, DurationAttributes, {
 
   notStarted: computed('state', function () {
     let state = this.get('state');
-    let waitingStates = ['created', 'queued', 'received', 'requeued'];
+    let waitingStates = ['created', 'queued', 'received'];
     return waitingStates.includes(state);
   }),
 
